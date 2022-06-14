@@ -1,1 +1,2 @@
 Flask
+gunicorn==18.0
