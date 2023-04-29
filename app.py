@@ -6,7 +6,7 @@ app = Flask(__name__)
 def main():
     return "Welcome to Docker Class at JJTECH!"
 
-@app.route('/how are you? Hope you are enjoying the class')
+@app.route('/how are you')
 def hello():
     return 'Yes Prof, I sure do. I love DevOps?'
 
