@@ -1,4 +1,5 @@
 FROM ubuntu
+LABEL JJTECH
 RUN apt update
 RUN apt full-upgrade -y && apt install python-pip -y
 RUN pip2 install flask
