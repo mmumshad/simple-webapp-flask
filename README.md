@@ -2,6 +2,10 @@
 
 This is a simple web application using [Python Flask](http://flask.pocoo.org/) and [MySQL](https://www.mysql.com/) database. 
 This is used in the demonstration of development of Ansible Playbooks.
+
+## While running the ubuntu image , port should be mapped with some input fields (-i) and terminal (-t) 
+       docker run -it -p 5000:5000 ubuntu bash
+-p tag will prevent further coming errors regarding the site opening !
   
   Below are the steps required to get this working on a base linux system.
   
