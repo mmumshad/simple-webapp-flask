@@ -9,22 +9,19 @@ This is used in the demonstration of development of Ansible Playbooks.
   - Install and Configure Web Server
   - Start Web Server
    
-## 1. Install all required dependencies
+## 1. Install python
   
   Python and its dependencies
 
-    apt-get install -y python python-setuptools python-dev build-essential python-pip python-mysqldb
-
+    apt update && apt full-upgrade -y  && apt install python-pip -y 
    
 ## 2. Install and Configure Web Server
 
 Install Python Flask dependency
 
-    pip install flask
-    pip install flask-mysql
+    pip2 install flask
 
-- Copy app.py or download it from source repository
-- Configure database credentials and parameters 
+- Copy app.py or download it from source repository 
 
 ## 3. Start Web Server
 
@@ -36,5 +33,4 @@ Start web server
 
 Open a browser and go to URL
 
-    http://<IP>:5000                            => Welcome
-    http://<IP>:5000/how%20are%20you            => I am good, how about you?
+    http://<IP>:8080                           
