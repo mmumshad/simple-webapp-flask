@@ -12,16 +12,21 @@ This is used in the demonstration of development of Ansible Playbooks.
 ## 1. Install all required dependencies
   
   Python and its dependencies
-
-    apt-get install -y python python-setuptools python-dev build-essential python-pip python-mysqldb
+  ```bash
+  apt-get update
+  apt-get install -y python3
+  apt-get install -y python3-pip
+  ```
 
    
 ## 2. Install and Configure Web Server
 
 Install Python Flask dependency
 
-    pip install flask
-    pip install flask-mysql
+  ```bash 
+  pip install flask
+  pip install flask-mysql
+  ```
 
 - Copy app.py or download it from source repository
 - Configure database credentials and parameters 
@@ -30,8 +35,10 @@ Install Python Flask dependency
 
 Start web server
 
-    FLASK_APP=app.py flask run --host=0.0.0.0
-    
+  ```bash
+  FLASK_APP=app.py flask run --host=0.0.0.0
+  ```
+
 ## 4. Test
 
 Open a browser and go to URL
