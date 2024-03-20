@@ -13,8 +13,7 @@ This is used in the demonstration of development of Ansible Playbooks.
   
   Python and its dependencies
 
-    apt-get install -y python python-setuptools python-dev build-essential python-pip python-mysqldb
-
+    sudo apt-get install -y python3 python3-dev python3-setuptools build-essential python3-pip default-libmysqlclient-dev
    
 ## 2. Install and Configure Web Server
 
