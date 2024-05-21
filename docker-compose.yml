@@ -1,0 +1,18 @@
+services:
+  flask-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '5001:5000'
+    expose:
+      - '5000'
+    networks:
+      - python-flask-app-network
+    volumes:
+      - './:/app'
+
+networks:
+  python-flask-app-network:
+    driver: bridge
