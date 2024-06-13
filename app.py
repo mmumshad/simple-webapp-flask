@@ -2,6 +2,8 @@ import os
 from flask import Flask
 app = Flask(__name__)
 
+password = "1231434"
+api_key = "23131231"
 @app.route("/")
 def main():
     return "Welcome!"
