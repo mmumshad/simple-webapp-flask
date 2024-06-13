@@ -4,6 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def main():
+    api_key = "1234"
     return "Welcome!"
 
 @app.route('/how are you')
