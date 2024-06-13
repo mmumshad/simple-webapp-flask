@@ -5,10 +5,10 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/python@master
-        continue-on-error: true # To make sure that SARIF upload gets called
+        uses: snyk/actions/python@v1
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
@@ -19,15 +19,16 @@ jobs:
         run: |
           RESULTS_LENGTH=$(jq '.runs[0].results | length' snyk.sarif)
           echo "RESULTS_LENGTH=$RESULTS_LENGTH" >> $GITHUB_ENV
-          echo $RESULTS_LENGTH
+          echo "::set-output name=results_length::$RESULTS_LENGTH"
       - name: Pass_or_Fail_the_job
         run: |
-          if [ "$RESULTS_LENGTH" != 0 ]; then
+          if [ "$RESULTS_LENGTH" -ne 0 ]; then
             echo "Job Failed"
             exit 1
           else
             echo "Pass"
           fi
+
   notify:
     runs-on: ubuntu-latest
     needs: security
@@ -36,6 +37,6 @@ jobs:
         run: |
           curl -H 'Content-Type: application/json' -d '{
             "text": "**The Snyk scan result for repo is:** '"${{ needs.security.result }}"'",
-            "**Number of vulnerabilities:** '"${{ env.RESULTS_LENGTH }}"'",
+            "**Number of vulnerabilities:** '"${{ needs.security.outputs.results_length }}"'",
             "**Detail:** https://github.com/'"${{ github.repository }}"'/actions/runs/'"${{ github.run_id }}"'"
           }' ${{ secrets.TEAMS_WEBHOOK_URL }}
