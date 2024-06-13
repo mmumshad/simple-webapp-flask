@@ -15,24 +15,27 @@ jobs:
           command: code test
           args: --sarif-file-output=snyk.sarif
       - name: Count total number of vulnerabilities
+        id: count_vulns
         run: |
           RESULTS_LENGTH=$(jq '.runs[0].results | length' snyk.sarif)
           echo "RESULTS_LENGTH=$RESULTS_LENGTH" >> $GITHUB_ENV
           echo $RESULTS_LENGTH
       - name: Pass_or_Fail_the_job
         run: |
-            if [ "$RESULTS_LENGTH" != 0 ]; then
-                echo "Job Failed"
-                exit 1
-            else
-                echo "Pass"
-            fi
-        
+          if [ "$RESULTS_LENGTH" != 0 ]; then
+            echo "Job Failed"
+            exit 1
+          else
+            echo "Pass"
+          fi
+  notify:
+    runs-on: ubuntu-latest
+    needs: security
+    steps:
       - name: Send notification to Microsoft Teams
-        if: always()
         run: |
           curl -H 'Content-Type: application/json' -d '{
-            "text": "**The Snyk scan result for repo is:** '"${{ job.status }}"'",
+            "text": "**The Snyk scan result for repo is:** '"${{ needs.security.result }}"'",
             "**Number of vulnerabilities:** '"${{ env.RESULTS_LENGTH }}"'",
             "**Detail:** https://github.com/'"${{ github.repository }}"'/actions/runs/'"${{ github.run_id }}"'"
           }' ${{ secrets.TEAMS_WEBHOOK_URL }}
