@@ -2,10 +2,8 @@ import os
 from flask import Flask
 app = Flask(__name__)
 
-password = "sdasda"
 @app.route("/")
 def main():
-    api_key = "1234"
     return "Welcome!"
 
 @app.route('/how are you')
