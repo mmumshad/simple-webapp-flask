@@ -29,11 +29,10 @@ jobs:
             fi
         
       - name: Send notification to Microsoft Teams
-        uses: devpro/teams-webhook-action@v1
         if: always()
-        with:
-          webhook_url: ${{ secrets.TEAMS_WEBHOOK_URL }}
-          message: |
-            **The Snyk scan result for repo is:** ${{ job.status }}
-            **Number of vulnerabilities:** ${{ env.RESULTS_LENGTH }}
-            **Detail:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -H 'Content-Type: application/json' -d '{
+            "text": "**The Snyk scan result for repo is:** '"${{ job.status }}"'",
+            "**Number of vulnerabilities:** '"${{ env.RESULTS_LENGTH }}"'",
+            "**Detail:** https://github.com/'"${{ github.repository }}"'/actions/runs/'"${{ github.run_id }}"'"
+          }' ${{ secrets.TEAMS_WEBHOOK_URL }}
