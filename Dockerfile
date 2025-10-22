@@ -1,5 +1,10 @@
-FROM ubuntu:20.04
-RUN apt-get update && apt-get install -y python3 python3-pip
-RUN pip3 install flask
-COPY app.py /opt/
-ENTRYPOINT FLASK_APP=/opt/app.py flask run --host=0.0.0.0 --port=8080
+FROM ubuntu
+
+RUN apt-get update
+RUN apt-get install -y python3 python3-setuptools python3-dev build-essential python3-pip default-libmysqlclient-dev
+RUN apt-get install -y python3-flask
+
+COPY app.py /opt/app.py
+ENV FLASK_APP=/opt/app.py
+
+ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
