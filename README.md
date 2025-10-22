@@ -24,8 +24,8 @@ Install Python Flask dependency
 apt-get install python3-flask
 ```
 
+- create app.py file with `cat > /opt/app.py`
 - Copy `app.py` into /opt/app.py or download it from a source repository
-- with `cat > /opt/app.py`
 - Configure database credentials and parameters 
 
 ## 3. Start Web Server
