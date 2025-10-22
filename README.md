@@ -13,6 +13,7 @@ This is used in the demonstration of the development of Ansible Playbooks.
   
   Python and its dependencies
   ```bash
+  apt-get update
   apt-get install -y python3 python3-setuptools python3-dev build-essential python3-pip default-libmysqlclient-dev
   ```
    
@@ -20,11 +21,11 @@ This is used in the demonstration of the development of Ansible Playbooks.
 
 Install Python Flask dependency
 ```bash
-pip3 install flask
-pip3 install flask-mysql
+apt-get install python3-flask
 ```
 
-- Copy `app.py` or download it from a source repository
+- Copy `app.py` into /opt/app.py or download it from a source repository
+- with `cat > /opt/app.py`
 - Configure database credentials and parameters 
 
 ## 3. Start Web Server
