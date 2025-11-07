@@ -1,14 +1,18 @@
-import os
+"""Módulo principal da aplicação Flask.
+Este arquivo inicializa o servidor e define as rotas principais.
+"""
+
 from flask import Flask
+
 app = Flask(__name__)
 
-@app.route("/")
-def main():
-    return "Welcome!"
-
-@app.route('/how are you')
+@app.route('/')
 def hello():
-    return 'I am good, how about you?'
+    """Rota principal da aplicação.
+    Retorna uma mensagem simples para o usuário.
+    """
+    return "Hello, World!"
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+def main():
+    """Função principal responsável por iniciar o servidor Flask."""
+    app.run(host='0.0.0.0', port=8080)
