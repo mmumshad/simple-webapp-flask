@@ -1,43 +1,46 @@
 # Simple Web Application
 
-This is a simple web application using [Python Flask](http://flask.pocoo.org/) and [MySQL](https://www.mysql.com/) database. 
-This is used in the demonstration of the development of Ansible Playbooks.
-  
-  Below are the steps required to get this working on a base linux system.
-  
-  - **Install all required dependencies**
-  - **Install and Configure Web Server**
-  - **Start Web Server**
-   
-## 1. Install all required dependencies
-  
-  Python and its dependencies
-  ```bash
-  apt-get install -y python3 python3-setuptools python3-dev build-essential python3-pip default-libmysqlclient-dev
-  ```
-   
-## 2. Install and Configure Web Server
+A minimal [Python Flask](https://flask.palletsprojects.com/) web application used as the demo app in the [KodeKloud Docker for Beginners](https://kodekloud.com/courses/docker-for-the-absolute-beginner-hands-on/) course.
 
-Install Python Flask dependency
+The app exposes two routes:
+
+| Route | Response |
+|---|---|
+| `/` | `Welcome!` |
+| `/how-are-you` | `I am good, how about you?` |
+
+## Run with Docker (recommended)
+
 ```bash
-pip3 install flask
-pip3 install flask-mysql
+git clone https://github.com/mmumshad/simple-webapp-flask.git
+cd simple-webapp-flask
+docker build -t simple-webapp-flask .
+docker run -p 5000:5000 simple-webapp-flask
 ```
 
-- Copy `app.py` or download it from a source repository
-- Configure database credentials and parameters 
+Then open `http://localhost:5000` and `http://localhost:5000/how-are-you` in a browser.
 
-## 3. Start Web Server
+## Run manually (without Docker)
 
-Start web server
 ```bash
+pip install flask
 FLASK_APP=app.py flask run --host=0.0.0.0
 ```
 
-## 4. Test
+The app listens on port `5000`.
 
-Open a browser and go to URL
+## The Dockerfile
+
+```dockerfile
+FROM python:3
+
+RUN pip install flask
+
+COPY app.py /opt/app.py
+
+ENV FLASK_APP=/opt/app.py
+
+ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
 ```
-http://<IP>:5000                            => Welcome
-http://<IP>:5000/how%20are%20you            => I am good, how about you?
-```
+
+Uses the official `python:3` image to avoid `apt-get`/PEP 668 friction and keep the image small.
