@@ -68,3 +68,55 @@ ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
 ```
 
 Each instruction mirrors one of the manual steps above — making it easy to see how a Dockerfile is just an automated install script.
+
+---
+
+# Student Contribution
+
+## Developer Information
+
+- **Name:** Cesar Enrique Garay Garcia
+- **University:** Universidad Tecnológica del Norte de Guanajuato (UTNG)
+- **Date:** 2026-06-01
+
+## Proposed Improvements
+
+1. Add a `docker-compose.yml` file to simplify multi-container deployments and reduce manual configuration steps for new developers.
+2. Include a `CONTRIBUTING.md` guide with coding standards, branch naming conventions, and PR review guidelines to streamline collaboration.
+3. Extend the API with additional routes (e.g., `/health` for health checks and `/version` to expose the current app version) to make it production-ready.
+
+## Observations
+
+This project serves as an excellent minimal reference for understanding how Flask applications are containerized using Docker. The straightforward structure — a single `app.py` alongside a `Dockerfile` — makes it easy for beginners to grasp the relationship between application code and container configuration. The documentation clearly maps each manual installation step to its corresponding Dockerfile instruction, which is a great pedagogical approach. Future improvements could focus on adding environment-variable support for configuration (e.g., port, debug mode) and providing a `requirements.txt` for proper Python dependency management instead of relying on system packages.
+
+---
+
+# 📸 Evidencias
+
+## Evidencia 1 — Fork creado
+
+<img width="960" height="456" alt="image" src="https://github.com/user-attachments/assets/4ccc754e-ed55-4874-a885-961d388fb63b" />
+
+
+## Evidencia 2 — Resultado de `git remote -v`
+
+<img width="960" height="461" alt="image" src="https://github.com/user-attachments/assets/8852ef21-ea76-4eb3-91e9-7cb96686abbf" />
+
+
+## Evidencia 3 — Resultado de `git branch`
+
+<img width="896" height="280" alt="image" src="https://github.com/user-attachments/assets/09fa6522-65e0-4686-b99d-62b7f0b71614" />
+
+## Evidencia 4 — Resultado de `git log --oneline`
+
+<img width="873" height="454" alt="image" src="https://github.com/user-attachments/assets/423c9ac7-3222-44cb-85eb-557da71ecf29" />
+
+
+## Evidencia 5 — Captura del Pull Request
+
+<img width="960" height="456" alt="image" src="https://github.com/user-attachments/assets/016808bd-5132-4dba-9910-c020e4e85471" />
+
+
+## Evidencia 6 — URL del Pull Request
+
+https://github.com/mmumshad/simple-webapp-flask/pull/73
