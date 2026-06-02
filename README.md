@@ -1,70 +1,91 @@
-# Simple Web Application
+# Student Contribution
 
-A minimal [Python Flask](https://flask.palletsprojects.com/) web application used as the demo app in the [KodeKloud Docker for Beginners](https://kodekloud.com/courses/docker-for-the-absolute-beginner-hands-on/) course.
+## Developer Information
 
-The app exposes two routes:
+- Name: Rios Rios Carol Guadalupe
+- University: Universidad Tecnologíca Del Norte de Guanajuato
+- Date: 01/06/2026
 
-| Route | Response |
-|---|---|
-| `/` | `Welcome!` |
-| `/how-are-you` | `I am good, how about you?` |
+## Proposed Improvements
 
-## Run manually (without Docker)
+1. Mejorar la estructura del README para nuevos contribuidores.
+2. Agregar ejemplos de ejecución local.
+3. Incluir diagrama de arquitectura.
 
-These steps assume a fresh machine.
 
-1. Select an OS - Ubuntu
+## Project Strengths
 
-2. Update the package index:
+1. Código simple y fácil de entender.
+2. Ideal para aprender Flask y despliegue básico.
+3. Buen ejemplo de aplicación web monolítica.
+4. Documentación mínima pero funcional.
+5. Fácil de ejecutar en cualquier entorno con Python.
 
-   ```bash
-   sudo apt-get update
-   ```
+## Improvement Opportunities
 
-3. Install Flask (this also pulls in Python 3):
+1. Agregar pruebas unitarias.
+2. Incluir un archivo requirements.txt más completo.
+3. Mejorar manejo de errores.
+4. Agregar logging.
+5. Documentar variables de entorno necesarias.
 
-   ```bash
-   sudo apt-get install -y python3-flask
-   ```
+## Technologies Used
 
-4. Set the Flask app environment variable:
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Python     | 3.9+    | Backend logic |
+| Flask      | 2.0+    | Web framework |
+| HTML/CSS   | -       | Frontend |
+| Docker     | Latest  | Containerization |
+| Git        | -       | Version control |
 
-   ```bash
-   export FLASK_APP=app.py
-   ```
+## Architecture Diagram
 
-5. Start the application:
+```mermaid
+graph TD
+    A[Cliente Navegador] --> B[Aplicación Flask]
+    B --> C[Rutas]
+    C --> D[Plantillas HTML]
+    B --> E[Lógica en Python]
+    E --> F[Respuesta al Cliente]
 
-   ```bash
-   flask run --host=0.0.0.0
-   ```
 
-Then open `http://localhost:5000` and `http://localhost:5000/how-are-you` in a browser.
+### Actividad E. Requerimientos funcionales
 
-## Run with Docker
+```markdown
+## Functional Requirements
 
-```bash
-git clone https://github.com/mmumshad/simple-webapp-flask.git
-cd simple-webapp-flask
-docker build -t simple-webapp-flask .
-docker run -p 5000:5000 simple-webapp-flask
-```
+RF-01 El sistema deberá mostrar una página de inicio.
+RF-02 El sistema deberá permitir la navegación entre rutas básicas.
+RF-03 El sistema deberá ejecutarse en un contenedor Docker.
+RF-04 El sistema deberá mostrar información del desarrollador.
+RF-05 El sistema deberá permitir agregar contenido al README.
+RF-06 El sistema deberá mantener la estructura original del proyecto.
+RF-07 El sistema deberá documentar sus dependencias.
+RF-08 El sistema deberá responder con código HTTP 200 en rutas válidas.
+RF-09 El sistema deberá ser compatible con Python 3.9+.
+RF-10 El sistema deberá permitir su ejecución local con Flask.
 
-Then open `http://localhost:5000` and `http://localhost:5000/how-are-you` in a browser.
+## Evidencias
 
-## The Dockerfile
+### Evidencia 1: Fork creado (imagen8)
+![Fork creado](images/imagen8.png)
 
-```dockerfile
-FROM ubuntu
+### Evidencia 2: git remote -v
+![git remote -v](images/imagen7.png)
 
-RUN apt-get update
-RUN apt-get install -y python3-flask
+### Evidencia 3: git branch
+![git branch](images/imagen6.png)
 
-COPY app.py /opt/app.py
+### Evidencia 4: git log --oneline
+![git log](images/imagen5.png)
 
-ENV FLASK_APP=/opt/app.py
+### Evidencia 5: Pull Request
+![Pull Request](images/imagen4.png)
 
-ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
-```
+### Evidencia 6: URL del Pull Request
+![URL Pull Request](images/imagen3.png)
 
-Each instruction mirrors one of the manual steps above — making it easy to see how a Dockerfile is just an automated install script.
+### Evidencias adicionales
+![Extra 1](images/imagen1.png)
+![Extra 2](images/imagen2.png)
