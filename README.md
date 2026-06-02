@@ -68,3 +68,23 @@ ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
 ```
 
 Each instruction mirrors one of the manual steps above — making it easy to see how a Dockerfile is just an automated install script.
+
+---
+
+# Student Contribution
+
+## Developer Information
+
+- **Name:** Cesar Enrique Garay Garcia
+- **University:** Universidad Tecnológica del Norte de Guanajuato (UTNG)
+- **Date:** 2026-06-01
+
+## Proposed Improvements
+
+1. Add a `docker-compose.yml` file to simplify multi-container deployments and reduce manual configuration steps for new developers.
+2. Include a `CONTRIBUTING.md` guide with coding standards, branch naming conventions, and PR review guidelines to streamline collaboration.
+3. Extend the API with additional routes (e.g., `/health` for health checks and `/version` to expose the current app version) to make it production-ready.
+
+## Observations
+
+This project serves as an excellent minimal reference for understanding how Flask applications are containerized using Docker. The straightforward structure — a single `app.py` alongside a `Dockerfile` — makes it easy for beginners to grasp the relationship between application code and container configuration. The documentation clearly maps each manual installation step to its corresponding Dockerfile instruction, which is a great pedagogical approach. Future improvements could focus on adding environment-variable support for configuration (e.g., port, debug mode) and providing a `requirements.txt` for proper Python dependency management instead of relying on system packages.
