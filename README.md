@@ -68,3 +68,69 @@ ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
 ```
 
 Each instruction mirrors one of the manual steps above — making it easy to see how a Dockerfile is just an automated install script.
+
+
+# Student Contribution
+
+## Developer Information
+
+- Name: Pedro Uriel Perez Monzon
+- University: Universidad Tecnológica del Norte de Guanajuato
+- Date: 2025
+
+## Proposed Improvements
+
+1. Mejorar la documentación de instalación
+2. Agregar ejemplos de uso de la aplicación
+3. Incluir instrucciones para despliegue en la nube
+
+## Observations
+
+Esta aplicación es un ejemplo sencillo de una aplicación web con Flask. Es ideal para aprender conceptos básicos de desarrollo web con Python.
+
+## Project Strengths
+
+1. Código simple y fácil de entender
+2. Uso de Flask, un framework ligero y popular
+3. Incluye archivo Dockerfile para despliegue
+4. Documentación clara y concisa
+5. Ideal para entornos de aprendizaje
+
+## Improvement Opportunities
+
+1. Agregar pruebas unitarias
+2. Implementar autenticación de usuarios
+3. Mejorar el diseño de la interfaz
+4. Agregar base de datos
+5. Implementar CI/CD pipeline
+
+## Technologies Used
+
+| Tecnología | Versión | Uso |
+|-----------|---------|-----|
+| Python | 3.x | Backend |
+| Flask | Latest | Framework web |
+| Docker | Latest | Contenedorización |
+| GitHub | - | Control de versiones |
+
+## Architecture Diagram
+
+```mermaid
+graph LR
+A[Cliente] --> B[Aplicación Flask]
+B --> C[Puerto 5000]
+C --> D[Respuesta HTTP]
+```
+
+## Functional Requirements
+
+- RF-01 El sistema deberá mostrar una página de bienvenida.
+- RF-02 El sistema deberá responder en el puerto 5000.
+- RF-03 El sistema deberá ejecutarse en un contenedor Docker.
+- RF-04 El sistema deberá manejar rutas HTTP básicas.
+- RF-05 El sistema deberá retornar respuestas en formato HTML.
+- RF-06 El sistema deberá soportar múltiples rutas.
+- RF-07 El sistema deberá ser desplegable en cualquier sistema operativo.
+- RF-08 El sistema deberá tener un tiempo de respuesta menor a 1 segundo.
+- RF-09 El sistema deberá incluir manejo básico de errores.
+- RF-10 El sistema deberá ser escalable mediante contenedores.
