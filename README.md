@@ -95,64 +95,28 @@ This project serves as an excellent minimal reference for understanding how Flas
 
 ## Evidencia 1 — Fork creado
 
-> Captura de pantalla del Fork creado en la cuenta personal de GitHub (`Cesax69/simple-webapp-flask`).
+<img width="960" height="456" alt="image" src="https://github.com/user-attachments/assets/4ccc754e-ed55-4874-a885-961d388fb63b" />
 
-<!-- Insertar captura del Fork aquí -->
 
 ## Evidencia 2 — Resultado de `git remote -v`
 
-```
-origin    https://github.com/Cesax69/simple-webapp-flask.git (fetch)
-origin    https://github.com/Cesax69/simple-webapp-flask.git (push)
-upstream  https://github.com/mmumshad/simple-webapp-flask.git (fetch)
-upstream  https://github.com/mmumshad/simple-webapp-flask.git (push)
-```
+<img width="960" height="461" alt="image" src="https://github.com/user-attachments/assets/8852ef21-ea76-4eb3-91e9-7cb96686abbf" />
+
 
 ## Evidencia 3 — Resultado de `git branch`
 
-```
-* dev
-  master
-```
+<img width="896" height="280" alt="image" src="https://github.com/user-attachments/assets/09fa6522-65e0-4686-b99d-62b7f0b71614" />
 
 ## Evidencia 4 — Resultado de `git log --oneline`
 
-```
-4961c2c docs: agregar seccion de Contribucion Estudiantil al README.md
-9cbf47d Update Dockerfile and README for Ubuntu setup and Flask installation
-44cbe59 Update README for Docker course (drop MySQL, add docker build/run)
-8fd4478 Modernize Dockerfile to FROM python:3, port 5000
-9dd6dff Merge pull request #15 from Tej-Singh-Rana/master
-a23e2f6 Removed the extra spaces
-47fd1dc Update ubuntu version
-4efe4c7 Updated Dockerfile
-3f3bd2d Updated python version
-5ce20c9 Upgraded ubuntu version to 18.04
-e2e6359 Merge pull request #6 from suyogpatil/patch-3
-ae46f74 Update
-efc0b6b Merge pull request #4 from suyogpatil/patch-1
-b31344f Update Dockerfile
-f592b20 Update Dockerfile
-3e0c7fc Rename dockerfile to Dockerfile
-e2e91fb Merge pull request #2 from tanbir2684/patch-1
-08f3037 Create dockerfile
-b441bb9 Update app.py
-e8704ae Update app.py
-868da47 Create requirements.txt
-1e3d0b7 Update README.md
-5374b64 Create app.py
-47dacf4 Create README.md
-430d0e7 Initial commit
-```
+<img width="873" height="454" alt="image" src="https://github.com/user-attachments/assets/423c9ac7-3222-44cb-85eb-557da71ecf29" />
+
 
 ## Evidencia 5 — Captura del Pull Request
 
-> Captura de pantalla del Pull Request creado en GitHub.
+<img width="960" height="456" alt="image" src="https://github.com/user-attachments/assets/016808bd-5132-4dba-9910-c020e4e85471" />
 
-<!-- Insertar captura del Pull Request aquí -->
 
 ## Evidencia 6 — URL del Pull Request
 
-> [Pull Request — docs: agregar seccion de Contribucion Estudiantil al README.md](https://github.com/mmumshad/simple-webapp-flask/pull/)
-
-<!-- Sustituir el enlace anterior con la URL exacta generada al crear el Pull Request -->
+https://github.com/mmumshad/simple-webapp-flask/pull/73
