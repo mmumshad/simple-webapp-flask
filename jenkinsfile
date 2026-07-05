@@ -1,0 +1,105 @@
+pipeline {
+    agent any
+
+    environment {
+        VENV_DIR = 'venv'
+        STAGING_DIR = "${WORKSPACE}/staging"
+        STAGING_PORT = '8000'
+        NOTIFY_EMAIL = 'your-email@example.com' // TODO: replace with your email
+    }
+
+    options {
+        timestamps()
+        skipDefaultCheckout(false)
+    }
+
+    triggers {
+        // Fallback in case the GitHub webhook isn't reachable from this Jenkins instance.
+        // Remove this if you are relying purely on the webhook trigger configured in the job.
+        pollSCM('H/5 * * * *')
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Setting up Python virtual environment and installing dependencies...'
+                sh '''
+                    python3 -m venv ${VENV_DIR}
+                    . ${VENV_DIR}/bin/activate
+                    pip install --upgrade pip
+                    if [ -f requirements.txt ]; then
+                        pip install -r requirements.txt
+                    else
+                        echo "No requirements.txt found, installing Flask and pytest as fallback."
+                        pip install flask pytest
+                    fi
+                    pip install pytest
+                '''
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running unit tests with pytest...'
+                sh '''
+                    . ${VENV_DIR}/bin/activate
+                    pytest --junitxml=test-results.xml
+                '''
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: 'test-results.xml'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo 'Deploying application to staging environment...'
+                sh '''
+                    . ${VENV_DIR}/bin/activate
+
+                    # Stop any previous staging instance
+                    if [ -f staging.pid ]; then
+                        kill $(cat staging.pid) || true
+                        rm -f staging.pid
+                    fi
+
+                    # Launch the Flask app in the background as a simple "staging" deployment.
+                    # Replace app.py with your actual entrypoint file if it differs.
+                    nohup python3 app.py --port=${STAGING_PORT} > staging.log 2>&1 &
+                    echo $! > staging.pid
+
+                    sleep 5
+                    echo "Staging app started with PID $(cat staging.pid) on port ${STAGING_PORT}"
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            mail to: "${NOTIFY_EMAIL}",
+                 subject: "SUCCESS: Jenkins Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
+                 body: "Good news! The build, test, and deploy stages all completed successfully.\n\nJob: ${env.JOB_NAME}\nBuild: ${env.BUILD_NUMBER}\nURL: ${env.BUILD_URL}"
+        }
+        failure {
+            mail to: "${NOTIFY_EMAIL}",
+                 subject: "FAILED: Jenkins Build #${env.BUILD_NUMBER} - ${env.JOB_NAME}",
+                 body: "The pipeline failed. Please check the console output.\n\nJob: ${env.JOB_NAME}\nBuild: ${env.BUILD_NUMBER}\nURL: ${env.BUILD_URL}console"
+        }
+        always {
+            cleanWs(patterns: [[pattern: 'venv/**', type: 'INCLUDE']])
+        }
+    }
+}

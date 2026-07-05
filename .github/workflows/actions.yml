@@ -1,0 +1,181 @@
+name: CI/CD Pipeline
+
+# ----------------------------------------------------------------------------
+# WHEN THIS WORKFLOW RUNS
+# ----------------------------------------------------------------------------
+on:
+  push:
+    branches:
+      - master
+      - staging
+  pull_request:
+    branches:
+      - master
+      - staging
+  release:
+    types: [published]     # fires when a Release/tag is published on GitHub
+  workflow_dispatch:        # allows manually triggering from the Actions tab
+
+env:
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  # --------------------------------------------------------------------------
+  # JOB 1: INSTALL DEPENDENCIES + RUN TESTS
+  # --------------------------------------------------------------------------
+  build-and-test:
+    name: Install & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+          pip install pytest pytest-cov flake8
+
+      - name: Lint with flake8 (non-blocking style check)
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        continue-on-error: false
+
+      - name: Run test suite with pytest
+        run: |
+          pytest --maxfail=1 --disable-warnings -q --cov=. --junitxml=pytest-report.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: pytest-report.xml
+
+  # --------------------------------------------------------------------------
+  # JOB 2: BUILD (package the app once tests pass)
+  # --------------------------------------------------------------------------
+  build:
+    name: Build Application
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Create build artifact
+        run: |
+          mkdir -p dist
+          zip -r dist/flask_app_build.zip . \
+            -x ".git/*" ".github/*" "tests/*" "*.pyc" "__pycache__/*" "dist/*"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flask-app-build
+          path: dist/flask_app_build.zip
+          retention-days: 7
+
+  # --------------------------------------------------------------------------
+  # JOB 3: DEPLOY TO STAGING (only on pushes to the "staging" branch)
+  # --------------------------------------------------------------------------
+  deploy-staging:
+    name: Deploy to Staging
+    needs: build
+    if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flask-app-build
+          path: dist
+
+      - name: Deploy to staging server
+        id: deploy
+        env:
+          STAGING_HOST: ${{ secrets.STAGING_HOST }}
+          STAGING_SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          STAGING_USER: ${{ secrets.STAGING_USER }}
+        run: |
+          echo "Deploying build to staging environment..."
+          # Example using SSH + scp — replace with your real deployment
+          # mechanism (Heroku, AWS Elastic Beanstalk, Azure Web App, etc.)
+          #
+          # mkdir -p ~/.ssh
+          # echo "$STAGING_SSH_KEY" > ~/.ssh/deploy_key
+          # chmod 600 ~/.ssh/deploy_key
+          # scp -i ~/.ssh/deploy_key dist/flask_app_build.zip \
+          #   $STAGING_USER@$STAGING_HOST:/var/www/flask_app/
+          # ssh -i ~/.ssh/deploy_key $STAGING_USER@$STAGING_HOST \
+          #   "cd /var/www/flask_app && unzip -o flask_app_build.zip && sudo systemctl restart flask_app"
+          echo "url=https://staging.example.com" >> "$GITHUB_OUTPUT"
+          echo "Staging deployment complete."
+
+  # --------------------------------------------------------------------------
+  # JOB 4: DEPLOY TO PRODUCTION (only when a Release/tag is published)
+  # --------------------------------------------------------------------------
+  deploy-production:
+    name: Deploy to Production
+    needs: build
+    if: github.event_name == 'release' && github.event.action == 'published'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flask-app-build
+          path: dist
+
+      - name: Deploy to production server
+        id: deploy
+        env:
+          PROD_HOST: ${{ secrets.PROD_HOST }}
+          PROD_SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
+          PROD_USER: ${{ secrets.PROD_USER }}
+          PROD_API_TOKEN: ${{ secrets.PROD_API_TOKEN }}
+        run: |
+          echo "Deploying release ${{ github.event.release.tag_name }} to production..."
+          # Same idea as staging — swap in your real deployment commands.
+          # scp -i ~/.ssh/deploy_key dist/flask_app_build.zip \
+          #   $PROD_USER@$PROD_HOST:/var/www/flask_app/
+          # ssh -i ~/.ssh/deploy_key $PROD_USER@$PROD_HOST \
+          #   "cd /var/www/flask_app && unzip -o flask_app_build.zip && sudo systemctl restart flask_app"
+          echo "url=https://production.example.com" >> "$GITHUB_OUTPUT"
+          echo "Production deployment complete."
