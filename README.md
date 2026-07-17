@@ -67,4 +67,3 @@ ENV FLASK_APP=/opt/app.py
 ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
 ```
 
-Each instruction mirrors one of the manual steps above — making it easy to see how a Dockerfile is just an automated install script.
