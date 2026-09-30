@@ -1,0 +1,8 @@
+.git
+.dockerignore
+Dockerfile
+k8s
+*.md
+*.tar
+LICENSE
+__pycache__

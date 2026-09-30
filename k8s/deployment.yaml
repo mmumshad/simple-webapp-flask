@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-webapp-flask
+  namespace: flask-webapp
+  labels:
+    app.kubernetes.io/name: simple-webapp-flask
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  # A new pod must stay Ready this long before the rollout moves on
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: simple-webapp-flask
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # Add one new pod at a time and never drop below the desired replica count
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: simple-webapp-flask
+    spec:
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      # Prefer spreading replicas across nodes, but still schedule if a node is down
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: simple-webapp-flask
+      containers:
+        - name: webapp
+          # Tag is managed in kustomization.yaml (images.newTag)
+          image: simple-webapp-flask:1.0.0
+          # The image is imported into each node's containerd, not pulled from a registry
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          # Holds off the other probes until the app has started (up to 30s)
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 2
+            failureThreshold: 15
+          # Failing readiness removes the pod from the Service endpoints
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 2
+          # Failing liveness restarts the container, so it is more tolerant than readiness
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          lifecycle:
+            # Keep serving while the pod is removed from Service endpoints, then stop
+            preStop:
+              exec:
+                command: ["sleep", "5"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]

@@ -1,0 +1,13 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: simple-webapp-flask
+  namespace: flask-webapp
+  labels:
+    app.kubernetes.io/name: simple-webapp-flask
+spec:
+  # During a node drain, evict at most one replica at a time
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: simple-webapp-flask

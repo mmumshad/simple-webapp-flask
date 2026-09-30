@@ -8,6 +8,8 @@ The app exposes two routes:
 |---|---|
 | `/` | `Welcome!` |
 | `/how-are-you` | `I am good, how about you?` |
+| `/healthz` | `{"status":"ok"}`, used by the Kubernetes probes |
+| `/version` | App version and hostname, e.g. `{"hostname":"...","version":"1.0.0"}` |
 
 ## Run manually (without Docker)
 
@@ -46,25 +48,14 @@ Then open `http://localhost:5000` and `http://localhost:5000/how-are-you` in a b
 ```bash
 git clone https://github.com/mmumshad/simple-webapp-flask.git
 cd simple-webapp-flask
-docker build -t simple-webapp-flask .
-docker run -p 5000:5000 simple-webapp-flask
+docker build --build-arg APP_VERSION=1.0.0 -t simple-webapp-flask:1.0.0 .
+docker run -p 5000:5000 simple-webapp-flask:1.0.0
 ```
 
 Then open `http://localhost:5000` and `http://localhost:5000/how-are-you` in a browser.
 
-## The Dockerfile
+The image is based on `python:3.12-slim`, installs the pinned packages from `requirements.txt`, runs the app with gunicorn on port 5000 as a non-root user, and bakes the `APP_VERSION` build argument into the `/version` endpoint.
 
-```dockerfile
-FROM ubuntu
+## Run on Kubernetes
 
-RUN apt-get update
-RUN apt-get install -y python3-flask
-
-COPY app.py /opt/app.py
-
-ENV FLASK_APP=/opt/app.py
-
-ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
-```
-
-Each instruction mirrors one of the manual steps above — making it easy to see how a Dockerfile is just an automated install script.
+The manifests and the instructions to deploy, update, roll back and remove the application are in [k8s/](k8s/README.md).
