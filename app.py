@@ -5,9 +5,12 @@ app = Flask(__name__)
 def main():
     return "Welcome!"
 
-@app.route('/how-are-you')
+
+@app.route('/hello')
 def hello():
-    return 'I am good, how about you?'
+    return "Hello, Open Source!"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
+
